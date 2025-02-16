@@ -8,6 +8,8 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js"
   },
+  "os": ["linux"],
+  "cpu": ["x64"],
   "keywords": [],
   "author": "",
   "license": "ISC",
