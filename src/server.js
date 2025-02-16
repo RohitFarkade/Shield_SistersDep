@@ -38,6 +38,12 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Internal Server Error' });
 });
+//added for testing
+app.get("/", (req, res) => {
+  res.send("Server is running on Vercel!");
+});
+
+module.exports = app;
 
 // Start the server
 const PORT = process.env.PORT || 5000;
