@@ -78,91 +78,31 @@ class AuthController {
             res.status(400).json({ error: error.message });
         }
     }
-    // static async addMultipleContacts(req, res) {
-    //     try {
-    //         const { userId, contacts } = req.body;
-
-    //         if (!contacts || contacts.length === 0) {
-    //             return res.status(400).json({ message: 'No contacts provided' });
-    //         }
-
-    //         const user = await User.findById(userId);
-
-    //         if (!user) {
-    //             return res.status(404).json({ message: 'User not found' });
-    //         }
-
-    //         // Add contacts to the user's contacts array
-    //         user.contacts.push(...contacts);
-
-    //         // Save updated user document
-    //         await user.save();
-
-    //         res.status(200).json({ message: 'Contacts added successfully', data: user.contacts });
-    //     } catch (error) {
-    //         res.status(500).json({ message: 'Error adding contacts', error: error.message });
-    //     }
-    // }
     static async addMultipleContacts(req, res) {
         try {
             const { userId, contacts } = req.body;
-    
+
             if (!contacts || contacts.length === 0) {
                 return res.status(400).json({ message: 'No contacts provided' });
             }
-    
+
             const user = await User.findById(userId);
-    
+
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-    
-            // Ensure unique contacts
-            const newContacts = contacts.filter(contact =>
-                !user.contacts.some(existing => existing.phone === contact.phone)
-            );
-    
-            user.contacts.push(...newContacts);
+
+            // Add contacts to the user's contacts array
+            user.contacts.push(...contacts);
+
+            // Save updated user document
             await user.save();
-    
+
             res.status(200).json({ message: 'Contacts added successfully', data: user.contacts });
         } catch (error) {
             res.status(500).json({ message: 'Error adding contacts', error: error.message });
         }
     }
-    static async getUserLocation(req, res) {
-        try {
-            const { userId, requesterId } = req.body;
-    
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
-    
-            // Check if requester is in the sharedWith list
-            if (!user.sharedWith.includes(requesterId)) {
-                return res.status(403).json({ message: "Access denied" });
-            }
-    
-            // Fetch location from Firestore
-            const locationDoc = await admin.firestore()
-                .collection('users')
-                .doc(userId)
-                .collection('location')
-                .doc('current')
-                .get();
-    
-            if (!locationDoc.exists) {
-                return res.status(404).json({ message: "No location data found" });
-            }
-    
-            res.json(locationDoc.data());
-        } catch (error) {
-            res.status(500).json({ message: "Error fetching location", error: error.message });
-        }
-    }
-    
-    
 }
     
 
