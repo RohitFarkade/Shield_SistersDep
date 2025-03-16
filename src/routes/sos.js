@@ -1,3 +1,6 @@
+
+
+
 // import express from 'express';
 // import twilio from 'twilio';
 // import dotenv from 'dotenv';
@@ -54,7 +57,7 @@
 //                 savedContacts.push(newContact);
 //             } catch (error) {
 //                 if (error.code === 11000) {
-//                     return res.status(400).json({ message: `Phone number already exists: ${contact.phone}` });
+//                     return res.status(400).json({ message: `Phone number already exists for this user: ${contact.phone}` });
 //                 }
 //                 throw error;
 //             }
@@ -115,8 +118,6 @@
 // });
 
 // export default router;
-
-
 
 import express from 'express';
 import twilio from 'twilio';
@@ -231,6 +232,23 @@ router.post('/sendsos', async (req, res) => {
     } catch (error) {
         console.error('Error sending SOS messages:', error.message);
         res.status(500).json({ message: 'Error sending SOS messages!', error: error.message });
+    }
+});
+
+// Get all contacts for a user
+router.get('/getcontacts', async (req, res) => {
+    try {
+        const userId = req.headers['userid']; // Get userId from header
+        if (!userId) {
+            return res.status(400).json({ message: 'userId header is required' });
+        }
+
+        // Find all contacts for the user
+        const contacts = await Contact.find({ userId });
+        res.status(200).json({ contacts: contacts });
+    } catch (error) {
+        console.error('Error fetching contacts:', error.message);
+        res.status(500).json({ message: 'Error fetching contacts!', error: error.message });
     }
 });
 
