@@ -15,6 +15,7 @@ router.post('/send-otp', AuthController.sendResetOTP);
 router.post('/verify-otp', AuthController.verifyResetOTP);
 router.post('/reset-password', AuthController.resetPassword);
 router.get('/getcontacts', AuthController.getContacts);
+router.get('/api/sos/getcontacts', AuthController.getContacts);
 router.put('/updatecontact', AuthController.updateContact);
 router.delete('/deletecontact', AuthController.deleteContact);
 
