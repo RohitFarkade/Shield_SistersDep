@@ -222,16 +222,16 @@ class AuthController {
     // Fetch user contacts
     static async getContacts(req, res) {
         try {
-            const userId = req.user.id;
-            const user = await User.findById(userId).select('contacts');
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-            res.status(200).json({ contacts: user.contacts });
+          const userId = req.headers['userid']; // Get userId from header (case-insensitive)
+          if (!userId) {
+            return res.status(400).json({ message: 'userId header is required' });
+          }
+          const contacts = await Contact.find({ userId: userId });
+          res.status(200).json({ contacts: contacts });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+          res.status(500).json({ error: error.message });
         }
-    }
+      }
 
     // Update contact
     static async updateContact(req, res) {
