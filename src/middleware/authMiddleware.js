@@ -13,10 +13,5 @@ const authMiddleware = (req, res, next) => {
         res.status(401).json({ error: 'Please authenticate' });
     }
 };
-const cors = require('cors');
-app.use(cors({
-  origin: '*', // Allow all origins (replace with your Flutter app's URL)
-  methods: ['POST', 'GET', 'PUT', 'DELETE'], // Explicitly allow POST
-}));
 
 export default authMiddleware;
