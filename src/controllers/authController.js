@@ -112,6 +112,7 @@
 
 import AuthService from '../services/authServices.js';
 import User from '../models/contact.js';
+import Contact from '../models/contact.js';
 
 class AuthController {
     // User sign-up
