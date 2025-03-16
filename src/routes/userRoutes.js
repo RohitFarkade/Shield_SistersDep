@@ -14,5 +14,8 @@ router.delete('/delete', authMiddleware, AuthController.deleteProfile); // Delet
 router.post('/send-otp', AuthController.sendResetOTP);
 router.post('/verify-otp', AuthController.verifyResetOTP);
 router.post('/reset-password', AuthController.resetPassword);
+router.get('/sos/getcontacts', AuthController.getContacts);
+router.put('/sos/updatecontact', AuthController.updateContact);
+router.delete('/sos/deletecontact', AuthController.deleteContact);
 
 export default router;
