@@ -208,7 +208,7 @@ class AuthController {
             // Prefix "+91" to phone numbers if not already present
             const updatedContacts = contacts.map(contact => ({
                 name: contact.name,
-                phone: contact.phone.startsWith('+91') ? contact.phone : `+91${contact.phone}`,
+                phone: contact.phone.startsWith('+91') ? contact.phone : `+91$ {contact.phone}`,
             }));
 
             user.contacts.push(...updatedContacts);
