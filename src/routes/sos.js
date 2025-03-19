@@ -23,32 +23,7 @@ const validatePhoneNumber = (phone) => {
     return phoneRegex.test(phone);
 };
 
-// Save contacts
-// router.post('/savecontacts', async (req, res) => {
-//     const { userId, contacts } = req.body;
-//     if (!Array.isArray(contacts) || contacts.length === 0) {
-//         return res.status(400).json({ message: 'Contacts array is empty or invalid!' });
-//     }
-//     try {
-//         const user = await User.findById(userId);
-//         if (!user) {
-//             return res.status(404).json({ message: 'User not found!' });
-//         }
-//         const savedContacts = [];
-//         for (const contact of contacts) {
-//             if (!validatePhoneNumber(contact.phone)) {
-//                 return res.status(400).json({ message: `Invalid phone number format: ${contact.phone}` });
-//             }
-//             const newContact = new Contact({ userId, name: contact.name, phone: contact.phone });
-//             await newContact.save();
-//             savedContacts.push(newContact);
-//         }
-//         res.status(201).json({ message: 'Contacts saved successfully!', savedContacts });
-//     } catch (error) {
-//         console.error('Error saving contacts:', error.message);
-//         res.status(500).json({ message: 'Error saving contacts!', error: error.message });
-//     }
-// });
+
 
 router.post('/savecontacts', async (req, res) => {
     const { userId, contacts } = req.body;
@@ -132,7 +107,7 @@ router.get('/getcontacts', async (req, res) => {
 });
 
 // Add update and delete routes
-router.put('/updatecontact', async (req, res) => {
+router.post('/updatecontact', async (req, res) => {
     try {
         const { userId, contactId, name, phone } = req.body;
         const updatedContact = await Contact.findOneAndUpdate(
