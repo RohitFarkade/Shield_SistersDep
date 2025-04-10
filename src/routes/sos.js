@@ -61,7 +61,18 @@ router.post('/savecontacts', async (req, res) => {
 
 // Send SOS
 router.post('/sendsos', async (req, res) => {
-    const { userId, latitude, longitude } = req.body;
+    // const { userId, latitude, longitude } = req.body;
+    const {
+        userId,
+        latitude,
+        longitude,
+        batteryLevel,
+        chargingStatus,
+        connectionType,
+        deviceModel,
+        timestamp,
+        ringerMode
+      } = req.body;
     if (!latitude || !longitude) {
         return res.status(400).json({ message: 'Location required!' });
     }
@@ -73,7 +84,6 @@ router.post('/sendsos', async (req, res) => {
         const locationLink = `https://maps.google.com/?q=${latitude},${longitude}`;
         // const messageBody = `SOS! Location: ${locationLink}. Help!`;
         const messageBody = `🚨 EMERGENCY! SHIELD SISTER SOS TRIGGERED 🚨
-        User ID: ${userId} may be in immediate danger.
         
         📍 Location: ${locationLink}
         🔋 Battery: ${batteryLevel}% | Charging: ${chargingStatus}
