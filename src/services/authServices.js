@@ -52,16 +52,14 @@ class AuthService {
 
       // Generate and send OTP
       static async sendOTP(email) {
-        // const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false });
-        // const otp = otpGenerator.generate(length, {
-        //     digits: true,
-        //     lowerCaseAlphabets: false,
-        //     upperCaseAlphabets: false,
-        //     specialChars: false,
-        //   });
-        const otp = otpGenerator.generate(6, { digits: true, upperCase: false, specialChars: false });
-        // const otp = 123456; // For testing purposes, use a fixed OTP 
-
+       
+        const otp = otpGenerator.generate(6, {
+            digits: true,
+            lowerCaseAlphabets: false,
+            upperCaseAlphabets: false,
+            specialChars: false
+          });
+          
         // otpGenerator.generate(6, { upperCase: false, specialChars: false });
         console.log('Generated OTP:', otp); // Log the generated OTP for debugging
         // Save OTP and its expiry in user record
