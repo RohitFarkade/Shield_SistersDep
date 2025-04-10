@@ -68,14 +68,14 @@ class AuthService {
         const transporter = nodemailer.createTransport({
             service: 'Gmail', // Use your email service
             auth: {
-                user: 'gaznavisheikh01@gmail.com', // Your email
-                pass: 'kfaa filq bila ynox', // Your email password or app-specific password
+                user: 'shieldsister.app@gmail.com', // Your email
+                pass: 'ejll crcp cdkh xmrp', // Your email password or app-specific password
             },
         });
 
         // Send the OTP via email
         await transporter.sendMail({
-            from: '"ShieldSister"<gaznavisheikh01@gmail.com>',
+            from: '"ShieldSister"<shieldsister.app@gmail.com>',
             to: user.email,
             subject: 'Your OTP Code',
             text: `Your OTP code is ${otp}. It is valid for 5 minutes.`,
