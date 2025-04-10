@@ -53,7 +53,12 @@ class AuthService {
       // Generate and send OTP
       static async sendOTP(email) {
         // const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false });
-        const otp = otpGenerator.generate(6, { digits: true, upperCase: false, specialChars: false, alphabets: false });
+        const otp = otpGenerator.generate(length, {
+            digits: true,
+            lowerCaseAlphabets: false,
+            upperCaseAlphabets: false,
+            specialChars: false,
+          });
         // Save OTP and its expiry in user record
         const user = await User.findOneAndUpdate(
             { email },
