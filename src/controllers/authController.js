@@ -79,16 +79,29 @@ class AuthController {
     //         res.status(400).json({ error: error.message });
     //     }
     // }
-    static async resetPassword(email, newPassword, otp) {
+    // Combined OTP verification and password reset in one API
+static async resetPassword(req, res) {
+    try {
+        const { email, newPassword, otp } = req.body;
+
+        if (!email || !newPassword || !otp) {
+            return res.status(400).json({ error: 'Email, new password, and OTP are required' });
+        }
+
         // Step 1: Verify OTP
         const user = await AuthService.verifyOTP(email, otp);
-    
-        // Step 2: Update password
+
+        // Step 2: Reset password
         user.password = newPassword;
         await user.save();
-    
-        return user;
+
+        return res.status(200).json({ message: 'Password reset successful', user });
+    } catch (error) {
+        console.error('Reset password failed:', error);
+        return res.status(500).json({ error: error.message });
     }
+}
+
 
     static async addMultipleContacts(req, res) {
         try {
