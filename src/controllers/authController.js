@@ -69,15 +69,25 @@ class AuthController {
         }
     }
 
-    // Reset password
-    static async resetPassword(req, res) {
-        try {
-            const { email, newPassword } = req.body;
-            const user = await AuthService.resetPassword(email, newPassword);
-            res.status(200).json({ message: 'Password reset successfully', user });
-        } catch (error) {
-            res.status(400).json({ error: error.message });
-        }
+    // // Reset password
+    // static async resetPassword(req, res) {
+    //     try {
+    //         const { email, newPassword } = req.body;
+    //         const user = await AuthService.resetPassword(email, newPassword);
+    //         res.status(200).json({ message: 'Password reset successfully', user });
+    //     } catch (error) {
+    //         res.status(400).json({ error: error.message });
+    //     }
+    // }
+    static async resetPassword(email, newPassword, otp) {
+        // Step 1: Verify OTP
+        const user = await this.verifyOTP(email, otp);
+    
+        // Step 2: Update password
+        user.password = newPassword;
+        await user.save();
+    
+        return user;
     }
 
     static async addMultipleContacts(req, res) {
