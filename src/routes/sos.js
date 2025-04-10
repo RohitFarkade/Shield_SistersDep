@@ -68,7 +68,7 @@ router.post('/sendsos', async (req, res) => {
         longitude,
         batteryLevel,
         chargingStatus,
-        connectionType,
+        networkStatus,
         deviceModel,
         timestamp,
         ringerMode
@@ -82,17 +82,9 @@ router.post('/sendsos', async (req, res) => {
             return res.status(404).json({ message: 'No contacts found!' });
         }
         const locationLink = `https://maps.google.com/?q=${latitude},${longitude}`;
-        // const messageBody = `SOS! Location: ${locationLink}. Help!`;
-        const messageBody = `🚨 EMERGENCY! SHIELD SISTER SOS TRIGGERED 🚨
-        
-        📍 Location: ${locationLink}
-        🔋 Battery: ${batteryLevel}% | Charging: ${chargingStatus}
-        📶 Network: ${connectionType}
-        📱 Device: ${deviceModel}
-        🔕 Ringer: ${ringerMode}
-        ⏰ Time: ${timestamp}
-        
-        ⚠️ Act now. Try to contact the user or alert nearby authorities.`;
+        // const messageBody = `EMERGENCY! SHIELD SISTER SOS TRIGGERED Location: https://maps.google.com/?q=19.57,79.18 Battery: ${batteryLevel} ${chargingStatus}: ${networkStatus} Device:${deviceModel} Time:${timestamp} Contact immediately.`;
+        const messageBody = `EMERGENCY! SOS TRIGGERED\nLocation:${locationLink}\nBattery: ${batteryLevel}%\nTime: ${timestamp}\nCall now!`;
+
         const messages = [];
         for (const contact of contacts) {
             try {
