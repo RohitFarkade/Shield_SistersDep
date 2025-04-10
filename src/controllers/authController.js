@@ -81,7 +81,7 @@ class AuthController {
     // }
     static async resetPassword(email, newPassword, otp) {
         // Step 1: Verify OTP
-        const user = await this.AuthService.verifyOTP(email, otp);
+        const user = await AuthService.verifyOTP(email, otp);
     
         // Step 2: Update password
         user.password = newPassword;
