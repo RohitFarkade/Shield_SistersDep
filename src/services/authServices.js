@@ -59,7 +59,11 @@ class AuthService {
         //     upperCaseAlphabets: false,
         //     specialChars: false,
         //   });
-        const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+        const otp = otpGenerator.generate(6, { digits: true, upperCase: false, specialChars: false });
+        // const otp = 123456; // For testing purposes, use a fixed OTP 
+
+        // otpGenerator.generate(6, { upperCase: false, specialChars: false });
+        console.log('Generated OTP:', otp); // Log the generated OTP for debugging
         // Save OTP and its expiry in user record
         const user = await User.findOneAndUpdate(
             { email },
