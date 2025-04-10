@@ -69,7 +69,7 @@ class AuthService {
             service: 'Gmail', // Use your email service
             auth: {
                 user: 'shieldsister.app@gmail.com', // Your email
-                pass: 'ejll crcp cdkh xmrp', // Your email password or app-specific password
+                pass: 'ejllcrcpcdkhxmrp', // Your email password or app-specific password
             },
         });
 
