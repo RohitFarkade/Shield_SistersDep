@@ -16,95 +16,155 @@ class AuthService {
     //     await user.save();
     //     return user;
     // }
-    static async userRegister(data) {
-        const { email, fullname, password, phone } = data;
+    // static async userRegister(data) {
+    //     const { email, fullname, password, phone } = data;
 
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            throw new Error('User already exists');
-        }
+    //     // Check if user already exists
+    //     const existingUser = await User.findOne({ email });
+    //     if (existingUser) {
+    //         throw new Error('User already exists');
+    //     }
 
-        // Check if OTP was verified in TempRegistration
-        const tempReg = await TempRegistration.findOne({ email });
-        if (!tempReg || !tempReg.otp) {
-            throw new Error('Please verify your email with OTP');
-        }
+    //     // Check if OTP was verified in TempRegistration
 
-        // Create new user
-        const user = new User({ email, fullname, password, phone });
-        await user.save();
+    //     // Create new user
+    //     const user = new User({ email, fullname, password, phone });
+    //     await user.save();
 
-        // Delete temporary registration record
-        await TempRegistration.deleteOne({ email });
+    //     // Delete temporary registration record
+    //     await TempRegistration.deleteOne({ email });
 
-        return user;
-    }
+    //     return user;
+    // }
 
-    static async sendRegistrationOTP(email, fullname, phone) {
-        const otp = otpGenerator.generate(6, {
-            digits: true,
-            lowerCaseAlphabets: false,
-            upperCaseAlphabets: false,
-            specialChars: false,
-        });
-        console.log('Generated Registration OTP:', otp); // Log for debugging
+    // static async sendRegistrationOTP(email, fullname, phone) {
+    //     const otp = otpGenerator.generate(6, {
+    //         digits: true,
+    //         lowerCaseAlphabets: false,
+    //         upperCaseAlphabets: false,
+    //         specialChars: false,
+    //     });
+    //     console.log('Generated Registration OTP:', otp); // Log for debugging
 
-        // Check if email is already in use
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            throw new Error('Email already registered');
-        }
+    //     // Check if email is already in use
+    //     const existingUser = await User.findOne({ email });
+    //     if (existingUser) {
+    //         throw new Error('Email already registered');
+    //     }
 
-        // Store or update temporary registration record
-        await TempRegistration.findOneAndUpdate(
-            { email },
-            {
-                email,
-                otp,
-                otpExpiry: Date.now() + OTP_EXPIRY,
-                fullname,
-                phone,
-            },
-            { upsert: true, new: true }
-        );
+    //     // Store or update temporary registration record
+    //     await TempRegistration.findOneAndUpdate(
+    //         { email },
+    //         {
+    //             email,
+    //             otp,
+    //             otpExpiry: Date.now() + OTP_EXPIRY,
+    //             fullname,
+    //             phone,
+    //         },
+    //         { upsert: true, new: true }
+    //     );
 
         // Configure email transport
+    //     const transporter = nodemailer.createTransport({
+    //         service: 'Gmail',
+    //         auth: {
+    //             user: 'shieldsister.app@gmail.com',
+    //             pass: 'ejllcrcpcdkhxmrp',
+    //         },
+    //     });
+
+    //     // Send OTP email
+    //     await transporter.sendMail({
+    //         from: '"ShieldSister" <shieldsister.app@gmail.com>',
+    //         to: email,
+    //         subject: 'Your OTP Code for Registration',
+    //         text: `Your OTP code is ${otp}. It is valid for 5 minutes.`,
+    //     });
+
+    //     return { email };
+    // }
+    // static async verifyRegistrationOTP(email, otp) {
+    //     const tempReg = await TempRegistration.findOne({ email });
+    //     console.log('Stored OTP:', tempReg?.otp, 'Received OTP:', otp);
+    //     console.log('Current Time:', new Date(Date.now()), 'Expiry:', new Date(tempReg?.otpExpiry));
+    
+    //     if (!tempReg) {
+    //         throw new Error('No registration request found');
+    //     }
+    //     if (tempReg.otp !== String(otp) || Date.now() > tempReg.otpExpiry) {
+    //         throw new Error('Invalid or expired OTP');
+    //     }
+    
+    //     // Delete the document instead of setting otp to null
+    //     await TempRegistration.deleteOne({ _id: tempReg._id });
+    //     return { email };
+    // }
+    static async sendRegistrationOTP(email, fullname, phone) {
+        const otp = otpGenerator.generate(6, { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+        console.log('Generated OTP:', otp);
+        const normalizedEmail = email.toLowerCase();
+    
+        const existingUser = await User.findOne({ email: normalizedEmail });
+        if (existingUser) throw new Error('Email already registered');
+    
+        const expiry = Date.now() + OTP_EXPIRY;
+        await TempRegistration.findOneAndUpdate(
+            { email: normalizedEmail },
+            { email: normalizedEmail, otp, otpExpiry: expiry, fullname, phone },
+            { upsert: true, new: true }
+        );
+    
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
-            auth: {
-                user: 'shieldsister.app@gmail.com',
-                pass: 'ejllcrcpcdkhxmrp',
-            },
+            auth: { user: 'shieldsister.app@gmail.com', pass: 'ejllcrcpcdkhxmrp' },
         });
-
-        // Send OTP email
         await transporter.sendMail({
             from: '"ShieldSister" <shieldsister.app@gmail.com>',
-            to: email,
+            to: normalizedEmail,
             subject: 'Your OTP Code for Registration',
-            text: `Your OTP code is ${otp}. It is valid for 5 minutes.`,
+            text: `Your OTP code is ${otp}. Valid for 5 minutes.`,
         });
-
-        return { email };
+    
+        return { email: normalizedEmail };
     }
+    
     static async verifyRegistrationOTP(email, otp) {
-        const tempReg = await TempRegistration.findOne({ email });
+        const normalizedEmail = email.toLowerCase();
+        const tempReg = await TempRegistration.findOne({ email: normalizedEmail });
+        console.log('Stored OTP:', tempReg?.otp, 'Received OTP:', otp);
+        console.log('Current Time:', new Date(Date.now()), 'Expiry:', new Date(tempReg?.otpExpiry));
+    
         if (!tempReg) {
             throw new Error('No registration request found');
         }
-
-        if (tempReg.otp !== otp || Date.now() > tempReg.otpExpiry) {
+        if (tempReg.otp !== String(otp) || Date.now() > tempReg.otpExpiry) {
             throw new Error('Invalid or expired OTP');
         }
-
-        // Mark OTP as verified by clearing it (prevents re-verification)
-        tempReg.otp = null;
-        await tempReg.save();
-
-        return { email };
+    
+        await TempRegistration.deleteOne({ _id: tempReg._id });
+        return { email: normalizedEmail };
     }
-
+    
+    static async userRegister(data) {
+        const { email, fullname, password, phone } = data;
+        const normalizedEmail = email.toLowerCase();
+    
+        const existingUser = await User.findOne({ email: normalizedEmail });
+        if (existingUser) {
+            throw new Error('User already exists');
+        }
+    
+        // Check if OTP was verified (document should be deleted)
+        const tempReg = await TempRegistration.findOne({ email: normalizedEmail });
+        if (tempReg) {
+            throw new Error('Please verify your email with OTP');
+        }
+    
+        const user = new User({ email: normalizedEmail, fullname, password, phone });
+        await user.save();
+        return user;
+    }
 
 
     // userLogin logic for students
