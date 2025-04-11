@@ -31,7 +31,8 @@ router.post('/signup', AuthController.Register);
 router.post('/login', AuthController.Login);
 router.put('/update', authMiddleware, AuthController.updateProfile); // Update user profile
 router.delete('/delete', authMiddleware, AuthController.deleteProfile); // Delete user profile
-
+router.post('/send-registration-otp', AuthController.sendRegistrationOTP);
+router.post('/verify-registration-otp', AuthController.verifyRegistrationOTP);
 
 router.post('/send-otp', AuthController.sendResetOTP);
 router.post('/verify-otp', AuthController.verifyResetOTP);
