@@ -71,7 +71,8 @@ router.post('/sendsos', async (req, res) => {
         networkStatus,
         deviceModel,
         timestamp,
-        ringerMode
+        ringerMode,
+        SOSCode,
       } = req.body;
     if (!latitude || !longitude) {
         return res.status(400).json({ message: 'Location required!' });
@@ -83,7 +84,7 @@ router.post('/sendsos', async (req, res) => {
         }
         const locationLink = `https://maps.google.com/?q=${latitude},${longitude}`;
         // const messageBody = `EMERGENCY! SHIELD SISTER SOS TRIGGERED Location: https://maps.google.com/?q=19.57,79.18 Battery: ${batteryLevel} ${chargingStatus}: ${networkStatus} Device:${deviceModel} Time:${timestamp} Contact immediately.`;
-        const messageBody = `EMERGENCY! SOS TRIGGERED\nLocation:${locationLink}\nBattery: ${batteryLevel}%\nTime: ${timestamp}\nCall now!`;
+        const messageBody = `EMERGENCY! SOS TRIGGERED\nLocation:${locationLink}\nSOSCode ${SOSCode}%\nTime: ${timestamp}\nCall now!`;
 
         const messages = [];
         for (const contact of contacts) {
