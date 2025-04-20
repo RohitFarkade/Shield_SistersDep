@@ -29,8 +29,8 @@ const router = express.Router();
 // user routes
 router.post('/signup', AuthController.Register);
 router.post('/login', AuthController.Login);
-router.put('/update', authMiddleware, AuthController.updateProfile); // Update user profile
-router.delete('/delete', authMiddleware, AuthController.deleteProfile); // Delete user profile
+router.put('/update', AuthController.updateProfile); // Update user profile
+router.delete('/delete', AuthController.deleteProfile); // Delete user profile
 router.post('/send-registration-otp', AuthController.sendRegistrationOTP);
 router.post('/verify-registration-otp', AuthController.verifyRegistrationOTP);
 
