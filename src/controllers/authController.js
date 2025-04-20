@@ -57,7 +57,7 @@ class AuthController {
     // Update User profile
     static async updateProfile(req, res) {
         try {
-            const userId = req.userId;
+            const { userId } = req.body;
             const updatedUser = await AuthService.updateUserProfile(userId, req.body);
             res.status(200).json({ message: 'User profile updated successfully', updatedUser });
         } catch (error) {
