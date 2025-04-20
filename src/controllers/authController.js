@@ -68,7 +68,7 @@ class AuthController {
     // Delete User profile
     static async deleteProfile(req, res) {
         try {
-            const userId = req.user.id;
+            const { userId } = req.body;
             await AuthService.deleteUserProfile(userId);
             res.status(200).json({ message: 'User profile deleted successfully' });
         } catch (error) {
