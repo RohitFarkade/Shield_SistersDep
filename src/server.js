@@ -35,4 +35,4 @@ app.get("/", (req, res) => {
     res.send("Server is running on Vercel!");
 });
 
-export default app; // Remove app.listen for Vercel
+export default app; 
